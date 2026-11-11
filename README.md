@@ -6,7 +6,9 @@ Automatic passive power relays in the normal Build menu.
 
 Install [Moon Sweepers Mod Loader](https://github.com/swooping-mods/moon-sweepers-mod-loader) first.
 
-Download [manual-power-poles-0.6.0.msmod](content/manual-power-poles-0.6.0.msmod), import it with **Install mod package**, then select the mod and its required frameworks.
+Download [manual-power-poles-0.6.0.msmod](content/manual-power-poles-0.6.0.msmod), then drag and drop the `.msmod` file onto the [Moon Sweepers Mod Loader](https://github.com/swooping-mods/moon-sweepers-mod-loader) window. You can also use **Add mods…** (older loader builds: **Install mod package**).
+
+Select the mod and its required frameworks, click **Prepare files**, then **Launch**.
 
 Required mods: [build-menu-framework](https://github.com/swooping-mods/build-menu-framework).
 
