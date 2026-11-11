@@ -1,5 +1,7 @@
 # Power Poles
 
+<img src="media/icon.png" alt="Power Poles icon" width="128" height="128">
+
 Automatic passive power relays in the normal Build menu.
 
 ## Install
