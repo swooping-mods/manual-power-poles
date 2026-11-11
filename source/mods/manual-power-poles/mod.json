@@ -1,0 +1,39 @@
+{
+  "id": "manual-power-poles",
+  "kind": "native",
+  "version": "0.6.0",
+  "backlog": "M13",
+  "display_name": "Power Poles",
+  "gameplay": true,
+  "feature_dependencies": [
+    "build-menu-framework"
+  ],
+  "play_help": [
+    "Equip the hammer (2). Build > Power > Power Pole ($75).",
+    "Place poles near power equipment; connections form automatically.",
+    "Poles relay power with native 15 m range and generate/store no electricity.",
+    "Move or remove a pole normally. Connections rebuild automatically after changes and reload."
+  ],
+  "build_ids": [
+    193
+  ],
+  "build_items": [
+    {
+      "kind": 193,
+      "key": "manual-power-poles.power-pole"
+    }
+  ],
+  "build_api": "build-menu-framework.build-menu",
+  "requires_apis": [
+    {
+      "api": "build-menu-framework.build-menu",
+      "abi": 1,
+      "min_size": 24,
+      "limits": {
+        "build_menu_max_kind": 193,
+        "native_power_nodes": 1
+      }
+    }
+  ],
+  "build_power_node": true
+}
