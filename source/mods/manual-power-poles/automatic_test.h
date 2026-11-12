@@ -164,12 +164,22 @@ static void pp_auto_begin(PTR walker){
     bevent("auto-fixture-started");
 }
 static int pp_auto_load(int id){
-    int ok=1;PTR player=call(bm.player,0,0,&ok);double dust=10000;void *stock[]={player,&dust};
-    call(dmethod("MoonCleaners","MoonWorld","DevSetCarriedDust","System.String;System.Double"),dget(bm.world),stock,&ok);
-    PTR reason=0;void *a[]={player,&id,&reason};PTR value=call(dmethod("MoonCleaners","MoonWorld","LoadProcessor","System.String;System.Int32;System.String&"),dget(bm.world),a,&ok);
-    double loaded=0;if(value)dcopy(&loaded,unbox(value),sizeof(loaded));
-    pp_auto_record(ok&&loaded>0?"auto-fixture-native-input-loaded":"auto-fixture-native-input-failed",id,(int)(loaded*1000),ok);
-    return ok&&loaded>0;
+    int ok=1,slot=0;DRoot player=dhold(call(bm.player,0,0,&ok));
+    void *identity[]={&id};DRoot state=dhold(call(dmethod("MoonCleaners","MoonWorld","ProductionOf","System.Int32"),dget(bm.world),identity,&ok));
+    if(!ok||!player||!state){ddrop(&state);ddrop(&player);bevent("auto-fixture-input-state-failed");return 0;}
+    void *stored[]={&slot};PTR value=call(dmethod("MoonCleaners","MoonProductionState","Stored","System.Int32"),dget(state),stored,&ok);
+    double before=0;if(value)dcopy(&before,unbox(value),sizeof(before));
+    /* This disposable test prepares only native input stock. The crew intake
+     * clamps to real store capacity; no power, progress or cadence is written.
+     * DevSetCarriedDust is disabled in the release player and cannot seed it. */
+    unsigned char cargo=0;double kilograms=1000;void *input[]={dget(player),&id,&cargo,&kilograms};
+    if(ok)call(dmethod("MoonCleaners","MoonWorld","CrewProcessorLoad","System.String;System.Int32;MoonCleaners.MoonCargo;System.Double"),dget(bm.world),input,&ok);
+    value=call(dmethod("MoonCleaners","MoonProductionState","Stored","System.Int32"),dget(state),stored,&ok);
+    double after=0;if(value)dcopy(&after,unbox(value),sizeof(after));
+    double loaded=after-before;int accepted=ok&&before>=0&&after>before&&after<=100000;
+    if(accepted)pp_auto_record("auto-fixture-input-preparation",id,(int)(before*1000),(int)(after*1000));
+    pp_auto_record(accepted?"auto-fixture-native-input-loaded":"auto-fixture-native-input-failed",id,accepted?(int)(loaded*1000):0,ok);
+    ddrop(&state);ddrop(&player);return accepted;
 }
 static void pp_auto_sample(void){
     int ok=1,mask=0,links=0;DRoot collection=dhold(call(dmethod("MoonCleaners","MoonWorld","get_PowerLinks",""),dget(bm.world),0,&ok));

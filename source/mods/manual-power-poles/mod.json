@@ -1,7 +1,7 @@
 {
   "id": "manual-power-poles",
   "kind": "native",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "backlog": "M13",
   "display_name": "Power Poles",
   "gameplay": true,

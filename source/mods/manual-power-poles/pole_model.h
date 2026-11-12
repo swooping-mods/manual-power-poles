@@ -5,6 +5,7 @@
 #include "assets/generated/model_data.h"
 static DRoot pp_template;
 static SMResources pp_resources;
+#include "presentation.h"
 static PTR pp_field(PTR obj,const char *name){return bfield(obj,name);}
 static int pp_ref(PTR obj,const char *name,PTR value){
     PTR f=get_field(object_class(obj),name);if(!f)return 0;PTR game=GetModuleHandleA("GameAssembly.dll");
@@ -20,6 +21,7 @@ static void pp_release(void *definition,void *world){
 static int pp_configure(void *definition,void *world){
     (void)world;if(!pp_field(definition,"prefab")||!su_bind(GetModuleHandleA("GameAssembly.dll")))return 0;
     if(!sm_prepare_pbr(&pp_model,&pp_resources,pp_pbr,1))return 0;
+    if(!pp_material_finish(0)){sm_release(&pp_resources);return 0;}
     PTR go=sm_attach(&pp_model,&pp_resources,0,0,"MoonLab PBR Power Pole template");
     pp_template=dhold(go);if(!pp_template){su_destroy(go);sm_release(&pp_resources);return 0;}
     int ok=1;PTR parent=pp_transform(go,&ok);if(!ok||!parent)goto fail;
